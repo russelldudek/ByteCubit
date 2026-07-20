@@ -1,0 +1,50 @@
+name: Generate printable campaign PDFs
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*.html'
+      - 'styles.css'
+      - 'brand-tokens.css'
+      - 'scripts/generate-pdfs.mjs'
+      - 'package.json'
+      - '.github/workflows/generate-pdfs.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: generate-campaign-pdfs
+  cancel-in-progress: true
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npm run generate-pdfs
+      - name: Verify page counts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq poppler-utils
+          test "$(pdfinfo docs/Russell-Dudek-Bytecubit-Resume.pdf | awk '/^Pages:/ {print $2}')" = "2"
+          test "$(pdfinfo docs/Russell-Dudek-Bytecubit-Cover-Letter.pdf | awk '/^Pages:/ {print $2}')" = "1"
+          test "$(pdfinfo docs/Russell-Dudek-Bytecubit-Interview-Thesis-Brief.pdf | awk '/^Pages:/ {print $2}')" = "4"
+          test "$(pdfinfo docs/Russell-Dudek-Bytecubit-90-Day-Plan.pdf | awk '/^Pages:/ {print $2}')" = "3"
+          test "$(pdfinfo docs/Russell-Dudek-Bytecubit-Technical-Fit-Proof-Plan.pdf | awk '/^Pages:/ {print $2}')" = "2"
+          test "$(pdfinfo docs/Russell-Dudek-Bytecubit-Signal-Twin-Review.pdf | awk '/^Pages:/ {print $2}')" = "2"
+      - name: Commit generated PDFs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/*.pdf
+          if git diff --cached --quiet; then
+            echo "PDFs already current."
+          else
+            git commit -m "Generate printable campaign PDFs"
+            git push
+          fi

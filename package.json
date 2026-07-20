@@ -1,0 +1,11 @@
+{
+  "name": "bytecubit-candidate-vision",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate-pdfs": "node scripts/generate-pdfs.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.54.1"
+  }
+}
