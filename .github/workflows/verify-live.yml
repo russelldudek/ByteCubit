@@ -130,3 +130,5 @@ jobs:
             git commit -m "Record exact live campaign verification"
             git push
           fi
+
+# Manual second-pass trigger: verifies the completed audit state and final public assets.
