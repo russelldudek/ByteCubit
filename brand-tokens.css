@@ -1,0 +1,16 @@
+:root {
+  --brand-navy: #111a52; /* source-sampled from public ByteCubit company mark */
+  --brand-red: #c6333d; /* source-sampled from public ByteCubit company mark */
+  --brand-ink: #101525;
+  --brand-blue: #2e4d9c;
+  --brand-pale: #eef2fb;
+  --brand-line: #cbd3e7;
+  --paper: #ffffff;
+  --muted: #586174;
+  --good: #16815d;
+  --hold: #b86d00;
+  --repair: #b93f4b;
+  --campaign-cyan: #2a91a4; /* candidate-original: comparison signal */
+  --radius: 14px;
+  --shadow: 0 20px 60px rgba(17, 26, 82, .12);
+}

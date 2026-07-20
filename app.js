@@ -1,0 +1,15 @@
+const scenarios={
+ function:{currentSource:'Machine event',currentLogic:'Legacy MES function',currentConsumer:'SQL + historian consumers',targetSource:'Canonical tag/event',targetLogic:'Ignition application',targetConsumer:'Contextual data contract',parity:'4/4',verdict:'Promote',evidence:'State, event, context, rollback',risk:'Hidden legacy dependency',owner:'Manufacturing + application owner'},
+ historian:{currentSource:'Mixed PI point estate',currentLogic:'Implicit naming and interfaces',currentConsumer:'Unknown reports / analyses',targetSource:'Qualified point inventory',targetLogic:'PI asset context + stewardship',targetConsumer:'Documented consumer map',parity:'2/4',verdict:'Repair',evidence:'Point use, owner, quality, retention',risk:'Breaking an unknown consumer',owner:'Historian steward + process owner'},
+ line:{currentSource:'New line/device signals',currentLogic:'Local startup logic',currentConsumer:'Production + quality launch',targetSource:'Reusable UDT/tag model',targetLogic:'Ignition line template',targetConsumer:'Standard SQL/PI contract',parity:'3/4',verdict:'Hold',evidence:'States, alarms, recipe, genealogy',risk:'Scaling an unproven template',owner:'Controls + manufacturing engineering'},
+ cloud:{currentSource:'Plant-floor events',currentLogic:'On-prem operational context',currentConsumer:'Local SQL / PI users',targetSource:'Owned event and asset schema',targetLogic:'Store-forward + governed integration',targetConsumer:'Cloud data product',parity:'3/4',verdict:'Hold',evidence:'Freshness, semantics, quality, access',risk:'Moving data without meaning',owner:'OT data owner + cloud consumer'}
+};
+const frame=document.querySelector('.workbench-frame');
+function applyScenario(key){const s=scenarios[key];if(!s)return;document.querySelectorAll('.scenario-button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.scenario===key)));for(const [id,val] of Object.entries({
+ 'current-source':s.currentSource,'current-logic':s.currentLogic,'current-consumer':s.currentConsumer,'target-source':s.targetSource,'target-logic':s.targetLogic,'target-consumer':s.targetConsumer,'parity-value':s.parity,'verdict':s.verdict,'evidence-readout':s.evidence,'risk-readout':s.risk,'owner-readout':s.owner}))document.getElementById(id).textContent=val;
+ const verdict=document.getElementById('verdict');verdict.style.background=s.verdict==='Promote'?'#e5f4ee':s.verdict==='Hold'?'#fff2d8':'#fde5e8';verdict.style.color=s.verdict==='Promote'?'#0a6749':s.verdict==='Hold'?'#8a5100':'#96323d';
+ frame.classList.remove('is-replaying');void frame.offsetWidth;frame.classList.add('is-replaying');
+}
+document.querySelectorAll('.scenario-button').forEach(b=>b.addEventListener('click',()=>applyScenario(b.dataset.scenario)));
+const menu=document.querySelector('.menu-button'),nav=document.querySelector('nav');if(menu){menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')==='true';menu.setAttribute('aria-expanded',String(!open));nav.classList.toggle('open',!open)});}
+applyScenario('function');
