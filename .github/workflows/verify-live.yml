@@ -4,6 +4,11 @@ on:
     branches: [main]
     paths:
       - 'campaign-audit.md'
+      - 'index.html'
+      - 'styles.css'
+      - 'brand-tokens.css'
+      - 'app.js'
+      - 'qa/check-hero-geometry.py'
       - '.github/workflows/verify-live.yml'
 permissions:
   contents: write
@@ -84,6 +89,14 @@ jobs:
           for pdf in "${pdfs[@]}"; do
             test -s "/tmp/bytecubit-live/docs/$pdf"
           done
+      - name: Install browser geometry dependencies
+        run: |
+          python -m pip install --disable-pip-version-check playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Verify live hero geometry
+        env:
+          BASE_URL: https://russelldudek.github.io/ByteCubit
+        run: python qa/check-hero-geometry.py "$BASE_URL"
       - name: Record verification
         shell: python
         run: |
@@ -99,26 +112,24 @@ jobs:
               'live_url': 'https://russelldudek.github.io/ByteCubit/',
               'routes_verified': 11,
               'pdfs_verified': 6,
-              'method': 'GitHub-hosted runner HTTP retrieval and byte-for-byte comparison against checkout',
+              'hero_viewports_verified': 5,
+              'method': 'GitHub-hosted HTTP byte comparison plus browser geometry checks across five viewports',
           }
           Path('live-verification.json').write_text(json.dumps(receipt, indent=2) + '\n')
 
           audit = Path('campaign-audit.md')
           text = audit.read_text()
-          if 'Campaign state: blocked' in text:
-              text = text.replace(
-                  'Campaign state: blocked — the complete campaign is published to `main`, but independent live-route verification is unavailable from the current execution environment.',
-                  'Campaign state: complete — the complete campaign is published to `main` and independently verified from the live GitHub Pages deployment.'
-              )
-              text = text.replace(
-                  '- Independent HTTP retrieval of the GitHub Pages domain could not be performed because the current execution environment could not resolve the domain and the available connector does not expose Pages administration or push-run inspection.',
-                  '- A GitHub-hosted release audit fetched eleven live routes and six PDFs and matched them byte-for-byte to the audited `main` checkout.'
-              )
-              text = text.replace(
-                  'The campaign may be promoted to `complete` only after the live site, all routes, reciprocal document links, interaction, reduced-motion state, and six PDF downloads are independently fetched and matched to the published source.',
-                  'Live site, route assets, reciprocal document controls, interaction source, reduced-motion source, and all six PDF downloads passed independent publication verification.'
-              )
-              audit.write_text(text)
+          passed_line = '- Hero workbench clipping: passed at 1440×900, 1280×800, 768×1024, 390×844, and 320×800 with all readouts and scenario buttons contained.'
+          if passed_line not in text:
+              anchor = '- Horizontal overflow: 0 at all audited viewports.'
+              if anchor not in text:
+                  raise SystemExit('Campaign audit is missing the geometry anchor')
+              text = text.replace(anchor, anchor + '\n' + passed_line, 1)
+          text = text.replace(
+              '- A GitHub-hosted release audit fetched eleven live routes and six PDFs and matched them byte-for-byte to the audited `main` checkout.',
+              '- A GitHub-hosted release audit fetched eleven live routes and six PDFs, matched them byte-for-byte to the audited `main` checkout, and confirmed the Signal Twin geometry across five responsive viewports.'
+          )
+          audit.write_text(text)
       - name: Commit verification record
         run: |
           git config user.name "github-actions[bot]"
@@ -127,8 +138,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "Verification record already current."
           else
-            git commit -m "Record exact live campaign verification"
+            git commit -m "Verify Signal Twin hero geometry"
             git push
           fi
-
-# Manual second-pass trigger: verifies the completed audit state and final public assets.
