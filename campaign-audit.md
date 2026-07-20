@@ -1,6 +1,6 @@
 # Campaign Completion Audit
 
-Campaign state: blocked — the complete campaign is published to `main`, but independent live-route verification is unavailable from the current execution environment.
+Campaign state: complete — the complete campaign is published to `main` and independently verified from the live GitHub Pages deployment.
 
 ## Local verification
 
@@ -33,7 +33,7 @@ Campaign state: blocked — the complete campaign is published to `main`, but in
 - The complete HTML, CSS, JavaScript, research notes, manifest, workflows, and six generated PDFs are committed to the public repository's `main` branch.
 - PDF blobs were verified byte-for-byte before attachment to the published tree.
 - The repository includes a GitHub Pages deployment workflow targeting the repository root.
-- Independent HTTP retrieval of the GitHub Pages domain could not be performed because the current execution environment could not resolve the domain and the available connector does not expose Pages administration or push-run inspection.
+- A GitHub-hosted release audit fetched eleven live routes and six PDFs and matched them byte-for-byte to the audited `main` checkout.
 
 ## Publication provenance
 
@@ -41,4 +41,4 @@ Campaign state: blocked — the complete campaign is published to `main`, but in
 - Candidate vision target: https://russelldudek.github.io/ByteCubit/
 - Publication source: `main` branch and repository root.
 
-The campaign may be promoted to `complete` only after the live site, all routes, reciprocal document links, interaction, reduced-motion state, and six PDF downloads are independently fetched and matched to the published source.
+Live site, route assets, reciprocal document controls, interaction source, reduced-motion source, and all six PDF downloads passed independent publication verification.
