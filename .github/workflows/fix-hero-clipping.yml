@@ -1,0 +1,100 @@
+name: Fix hero workbench clipping
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fix-hero-clipping.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch hero geometry and release regression
+        shell: python
+        run: |
+          from pathlib import Path
+
+          styles = Path('styles.css')
+          css = styles.read_text()
+          replacements = {
+              '.hero-visual{position:relative;min-height:600px}': '.hero-visual{position:relative;min-height:0}',
+              '.workbench-frame{position:absolute;inset:0;': '.workbench-frame{position:relative;',
+              '.hero-visual{min-height:610px}': '.hero-visual{min-height:0}',
+              '.hero-visual{min-height:760px}': '.hero-visual{min-height:0}',
+          }
+          for old, new in replacements.items():
+              if old not in css:
+                  raise SystemExit(f'Missing expected CSS pattern: {old}')
+              css = css.replace(old, new, 1)
+          styles.write_text(css)
+
+          workflow = Path('.github/workflows/verify-live.yml')
+          verify = workflow.read_text()
+          old_paths = """      - 'campaign-audit.md'\n      - '.github/workflows/verify-live.yml'"""
+          new_paths = """      - 'campaign-audit.md'\n      - 'index.html'\n      - 'styles.css'\n      - 'app.js'\n      - 'qa/check-hero-geometry.py'\n      - '.github/workflows/verify-live.yml'"""
+          if old_paths not in verify:
+              raise SystemExit('Could not locate verify-live path filter')
+          verify = verify.replace(old_paths, new_paths, 1)
+
+          record_marker = """          for pdf in \"${pdfs[@]}\"; do\n            test -s \"/tmp/bytecubit-live/docs/$pdf\"\n          done\n      - name: Record verification"""
+          browser_steps = """          for pdf in \"${pdfs[@]}\"; do\n            test -s \"/tmp/bytecubit-live/docs/$pdf\"\n          done\n      - name: Install browser geometry dependencies\n        run: |\n          python -m pip install --disable-pip-version-check playwright==1.55.0\n          python -m playwright install --with-deps chromium\n      - name: Verify live hero geometry\n        env:\n          BASE_URL: https://russelldudek.github.io/ByteCubit\n        run: python qa/check-hero-geometry.py \"$BASE_URL\"\n      - name: Record verification"""
+          if record_marker not in verify:
+              raise SystemExit('Could not locate live verification insertion point')
+          verify = verify.replace(record_marker, browser_steps, 1)
+
+          verify = verify.replace(
+              "'method': 'GitHub-hosted runner HTTP retrieval and byte-for-byte comparison against checkout',",
+              "'method': 'GitHub-hosted runner HTTP byte comparison plus browser geometry checks across five viewports',",
+              1,
+          )
+          verify = verify.replace(
+              "if 'Campaign state: blocked' in text:",
+              "if 'Campaign state: building — hero workbench geometry correction is committed; live deployment verification is pending.' in text:",
+              1,
+          )
+          verify = verify.replace(
+              "'Campaign state: blocked — the complete campaign is published to `main`, but independent live-route verification is unavailable from the current execution environment.',",
+              "'Campaign state: building — hero workbench geometry correction is committed; live deployment verification is pending.',",
+              1,
+          )
+          pending_line = '- Hero workbench clipping: correction committed; live geometry regression pending.'
+          passed_line = '- Hero workbench clipping: passed at 1440×900, 1280×800, 768×1024, 390×844, and 320×800 with all readouts and scenario buttons contained.'
+          promotion_anchor = "audit = Path('campaign-audit.md')\n          text = audit.read_text()"
+          promotion_insert = promotion_anchor + f"\n          text = text.replace({pending_line!r}, {passed_line!r})"
+          if promotion_anchor not in verify:
+              raise SystemExit('Could not locate campaign audit promotion block')
+          verify = verify.replace(promotion_anchor, promotion_insert, 1)
+          workflow.write_text(verify)
+
+          audit = Path('campaign-audit.md')
+          audit_text = audit.read_text()
+          complete_state = 'Campaign state: complete — the complete campaign is published to `main` and independently verified from the live GitHub Pages deployment.'
+          building_state = 'Campaign state: building — hero workbench geometry correction is committed; live deployment verification is pending.'
+          if complete_state not in audit_text:
+              raise SystemExit('Could not locate current campaign state')
+          audit_text = audit_text.replace(complete_state, building_state, 1)
+          overflow_line = '- Horizontal overflow: 0 at all audited viewports.'
+          if overflow_line not in audit_text:
+              raise SystemExit('Could not locate audit geometry anchor')
+          audit_text = audit_text.replace(
+              overflow_line,
+              overflow_line + '\n- Hero workbench clipping: correction committed; live geometry regression pending.',
+              1,
+          )
+          audit.write_text(audit_text)
+
+          Path('.github/workflows/fix-hero-clipping.yml').unlink()
+      - name: Commit correction
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add styles.css campaign-audit.md qa/check-hero-geometry.py .github/workflows/verify-live.yml .github/workflows/fix-hero-clipping.yml
+          git commit -m "Fix Signal Twin hero clipping"
+          git push
