@@ -1,0 +1,132 @@
+name: Verify live Bytecubit campaign
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'campaign-audit.md'
+      - '.github/workflows/verify-live.yml'
+permissions:
+  contents: write
+concurrency:
+  group: verify-live-bytecubit
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Wait for and verify GitHub Pages
+        env:
+          BASE_URL: https://russelldudek.github.io/ByteCubit
+        run: |
+          set -euo pipefail
+          routes=(
+            index.html
+            resume.html
+            cover-letter.html
+            interview-brief.html
+            90-day-plan.html
+            technical-fit-proof.html
+            signal-twin-review.html
+            styles.css
+            brand-tokens.css
+            app.js
+            campaign-audit.md
+          )
+          pdfs=(
+            Russell-Dudek-Bytecubit-Resume.pdf
+            Russell-Dudek-Bytecubit-Cover-Letter.pdf
+            Russell-Dudek-Bytecubit-Interview-Thesis-Brief.pdf
+            Russell-Dudek-Bytecubit-90-Day-Plan.pdf
+            Russell-Dudek-Bytecubit-Technical-Fit-Proof-Plan.pdf
+            Russell-Dudek-Bytecubit-Signal-Twin-Review.pdf
+          )
+          mkdir -p /tmp/bytecubit-live/docs
+          verified=0
+          for attempt in $(seq 1 45); do
+            ok=1
+            for route in "${routes[@]}"; do
+              if ! curl --fail --silent --show-error --location --max-time 20 "$BASE_URL/$route" -o "/tmp/bytecubit-live/$route"; then
+                ok=0
+                break
+              fi
+              if ! cmp --silent "$route" "/tmp/bytecubit-live/$route"; then
+                ok=0
+                break
+              fi
+            done
+            if [ "$ok" -eq 1 ]; then
+              for pdf in "${pdfs[@]}"; do
+                if ! curl --fail --silent --show-error --location --max-time 30 "$BASE_URL/docs/$pdf" -o "/tmp/bytecubit-live/docs/$pdf"; then
+                  ok=0
+                  break
+                fi
+                if ! cmp --silent "docs/$pdf" "/tmp/bytecubit-live/docs/$pdf"; then
+                  ok=0
+                  break
+                fi
+              done
+            fi
+            if [ "$ok" -eq 1 ]; then
+              verified=1
+              break
+            fi
+            sleep 10
+          done
+          test "$verified" -eq 1
+          grep -q 'Signal Twin Workbench' /tmp/bytecubit-live/index.html
+          grep -q 'View Cover Letter' /tmp/bytecubit-live/resume.html
+          grep -q 'View Resume' /tmp/bytecubit-live/cover-letter.html
+          grep -q 'prefers-reduced-motion:reduce' /tmp/bytecubit-live/styles.css
+          grep -q 'applyScenario' /tmp/bytecubit-live/app.js
+          for pdf in "${pdfs[@]}"; do
+            test -s "/tmp/bytecubit-live/docs/$pdf"
+          done
+      - name: Record verification
+        shell: python
+        run: |
+          from datetime import datetime, timezone
+          from pathlib import Path
+          import json, os
+
+          head = os.environ['GITHUB_SHA']
+          receipt = {
+              'status': 'passed',
+              'verified_source_head': head,
+              'verified_at_utc': datetime.now(timezone.utc).isoformat(),
+              'live_url': 'https://russelldudek.github.io/ByteCubit/',
+              'routes_verified': 11,
+              'pdfs_verified': 6,
+              'method': 'GitHub-hosted runner HTTP retrieval and byte-for-byte comparison against checkout',
+          }
+          Path('live-verification.json').write_text(json.dumps(receipt, indent=2) + '\n')
+
+          audit = Path('campaign-audit.md')
+          text = audit.read_text()
+          if 'Campaign state: blocked' in text:
+              text = text.replace(
+                  'Campaign state: blocked — the complete campaign is published to `main`, but independent live-route verification is unavailable from the current execution environment.',
+                  'Campaign state: complete — the complete campaign is published to `main` and independently verified from the live GitHub Pages deployment.'
+              )
+              text = text.replace(
+                  '- Independent HTTP retrieval of the GitHub Pages domain could not be performed because the current execution environment could not resolve the domain and the available connector does not expose Pages administration or push-run inspection.',
+                  '- A GitHub-hosted release audit fetched eleven live routes and six PDFs and matched them byte-for-byte to the audited `main` checkout.'
+              )
+              text = text.replace(
+                  'The campaign may be promoted to `complete` only after the live site, all routes, reciprocal document links, interaction, reduced-motion state, and six PDF downloads are independently fetched and matched to the published source.',
+                  'Live site, route assets, reciprocal document controls, interaction source, reduced-motion source, and all six PDF downloads passed independent publication verification.'
+              )
+              audit.write_text(text)
+      - name: Commit verification record
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add campaign-audit.md live-verification.json
+          if git diff --cached --quiet; then
+            echo "Verification record already current."
+          else
+            git commit -m "Record exact live campaign verification"
+            git push
+          fi
