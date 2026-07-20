@@ -1,6 +1,6 @@
 # Campaign Completion Audit
 
-Campaign state: building — publication and live-route verification pending.
+Campaign state: blocked — the complete campaign is published to `main`, but independent live-route verification is unavailable from the current execution environment.
 
 ## Local verification
 
@@ -28,10 +28,17 @@ Campaign state: building — publication and live-route verification pending.
 - Candidate-facing confidentiality scan: passed with 0 forbidden internal-name matches.
 - Evidence integrity: passed; no production Ignition tenure or AVEVA PI administration was claimed.
 
+## Publication verification
+
+- The complete HTML, CSS, JavaScript, research notes, manifest, workflows, and six generated PDFs are committed to the public repository's `main` branch.
+- PDF blobs were verified byte-for-byte before attachment to the published tree.
+- The repository includes a GitHub Pages deployment workflow targeting the repository root.
+- Independent HTTP retrieval of the GitHub Pages domain could not be performed because the current execution environment could not resolve the domain and the available connector does not expose Pages administration or push-run inspection.
+
 ## Publication provenance
 
 - Job posting: supplied in chat on July 20, 2026; no canonical public posting URL was verified.
-- Candidate vision: https://russelldudek.github.io/ByteCubit/
-- Publication target: GitHub Pages from `main` and repository root.
+- Candidate vision target: https://russelldudek.github.io/ByteCubit/
+- Publication source: `main` branch and repository root.
 
-This audit will be updated to `complete` after the committed `main` manifest and live deployment are independently verified.
+The campaign may be promoted to `complete` only after the live site, all routes, reciprocal document links, interaction, reduced-motion state, and six PDF downloads are independently fetched and matched to the published source.
