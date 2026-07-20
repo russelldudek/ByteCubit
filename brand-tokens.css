@@ -14,3 +14,13 @@
   --radius: 14px;
   --shadow: 0 20px 60px rgba(17, 26, 82, .12);
 }
+
+/* The Signal Twin must size from its complete content at every viewport. */
+.hero .hero-visual {
+  min-height: 0;
+}
+
+.hero-visual .workbench-frame {
+  position: relative;
+  inset: auto;
+}
