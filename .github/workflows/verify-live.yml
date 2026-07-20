@@ -141,3 +141,5 @@ jobs:
             git commit -m "Verify Signal Twin hero geometry"
             git push
           fi
+
+# Final user-correction verification trigger.
