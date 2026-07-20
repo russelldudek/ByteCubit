@@ -1,0 +1,36 @@
+{
+  "campaign": "Bytecubit Industrial Automation Engineer (Ignition Development)",
+  "candidate": "Russell Dudek",
+  "job_posting": "Supplied in chat on 2026-07-20; no public URL verified.",
+  "live_site": "https://russelldudek.github.io/ByteCubit/",
+  "routes": [
+    "index.html",
+    "resume.html",
+    "cover-letter.html",
+    "interview-brief.html",
+    "90-day-plan.html",
+    "technical-fit-proof.html",
+    "signal-twin-review.html"
+  ],
+  "downloads": [
+    "Russell-Dudek-Bytecubit-90-Day-Plan.pdf",
+    "Russell-Dudek-Bytecubit-Cover-Letter.pdf",
+    "Russell-Dudek-Bytecubit-Interview-Thesis-Brief.pdf",
+    "Russell-Dudek-Bytecubit-Resume.pdf",
+    "Russell-Dudek-Bytecubit-Signal-Twin-Review.pdf",
+    "Russell-Dudek-Bytecubit-Technical-Fit-Proof-Plan.pdf"
+  ],
+  "brand_assets": [
+    "assets/brand/README.md"
+  ],
+  "source_files": [
+    "styles.css",
+    "brand-tokens.css",
+    "app.js",
+    "brand-intelligence.md",
+    "role-intelligence.md",
+    "source-notes.md",
+    "campaign-audit.md",
+    "README.md"
+  ]
+}
