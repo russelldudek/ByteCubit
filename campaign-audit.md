@@ -19,6 +19,7 @@ Campaign state: complete — the complete campaign is published to `main` and in
 - Reduced motion: passed.
 - Keyboard-operable scenario interaction: passed.
 - Horizontal overflow: 0 at all audited viewports.
+- Hero workbench clipping: passed at 1440×900, 1280×800, 768×1024, 390×844, and 320×800 with all readouts and scenario buttons contained.
 - Resume: exactly 2 rendered pages.
 - Cover letter: exactly 1 rendered page.
 - Interview thesis brief: exactly 4 rendered pages.
@@ -33,7 +34,7 @@ Campaign state: complete — the complete campaign is published to `main` and in
 - The complete HTML, CSS, JavaScript, research notes, manifest, workflows, and six generated PDFs are committed to the public repository's `main` branch.
 - PDF blobs were verified byte-for-byte before attachment to the published tree.
 - The repository includes a GitHub Pages deployment workflow targeting the repository root.
-- A GitHub-hosted release audit fetched eleven live routes and six PDFs and matched them byte-for-byte to the audited `main` checkout.
+- A GitHub-hosted release audit fetched eleven live routes and six PDFs, matched them byte-for-byte to the audited `main` checkout, and confirmed the Signal Twin geometry across five responsive viewports.
 
 ## Publication provenance
 
