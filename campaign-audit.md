@@ -1,11 +1,18 @@
 # Campaign Completion Audit
 
-Campaign state: complete — the complete campaign is published to `main` and independently verified from the live GitHub Pages deployment.
+Campaign state: complete — the revised candidate-first campaign is published and verified from the live deployment.
 
-## Local verification
+## Candidate-positioning revision
+
+- The assessment-oriented supporting artifact was retired.
+- The primary hero action now opens a Role Alignment Brief focused on the mandate, verified experience, immediate contribution, and operating stance.
+- The former interview-oriented document is now a Candidate Thesis Brief focused on Russell's point of view, operating model, alignment, priorities, and questions.
+- Hiring-manager test language, proceed-or-reject framing, and self-authored evaluation language were removed from the site, documents, and generated PDFs.
+- The resume and cover letter now reinforce the same affirmative alignment story while preserving factual boundaries.
+
+## Verification
 
 - Manifest: passed.
-- Static source checks: 133 passed, 0 failed.
 - Brand fidelity: passed with documented logo-asset exception.
 - Visible company identity: passed through a clearly typeset Bytecubit wordmark treatment and independent-candidate qualifier.
 - Official logo/wordmark: unavailable at sufficient quality from an authoritative downloadable source; no mark was traced, redrawn, or hotlinked.
@@ -15,31 +22,35 @@ Campaign state: complete — the complete campaign is published to `main` and in
 - Visual experience: passed through the Signal Twin Workbench system.
 - Role-derived motion: passed.
 - UX psychology: passed.
-- Responsive render review: passed at 1440×900, 1280×800, 768×1024, and 390×844.
+- Responsive render baseline: passed at desktop, laptop, tablet, and mobile sizes.
+- Revised-route geometry: passed across laptop, tablet, and mobile for the candidate vision and all six document routes.
+- Horizontal overflow: 0 across all revised-route checks.
+- Document sheet overflow: 0 across all revised-route checks.
 - Reduced motion: passed.
 - Keyboard-operable scenario interaction: passed.
-- Horizontal overflow: 0 at all audited viewports.
-- Hero workbench clipping: passed at 1440×900, 1280×800, 768×1024, 390×844, and 320×800 with all readouts and scenario buttons contained.
 - Resume: exactly 2 rendered pages.
 - Cover letter: exactly 1 rendered page.
-- Interview thesis brief: exactly 4 rendered pages.
+- Candidate Thesis Brief: exactly 4 rendered pages.
 - 90-day plan: exactly 3 rendered pages.
-- Technical Fit & Proof Plan: exactly 2 rendered pages.
+- Role Alignment Brief: exactly 2 rendered pages.
 - Signal Twin Review: exactly 2 rendered pages.
+- Current PDF count: 6.
+- Superseded assessment PDFs: absent.
+- Rejected candidate-facing assessment phrases: 0 matches.
 - Candidate-facing confidentiality scan: passed with 0 forbidden internal-name matches.
 - Evidence integrity: passed; no production Ignition tenure or AVEVA PI administration was claimed.
 
-## Publication verification
+## Live publication verification
 
-- The complete HTML, CSS, JavaScript, research notes, manifest, workflows, and six generated PDFs are committed to the public repository's `main` branch.
-- PDF blobs were verified byte-for-byte before attachment to the published tree.
-- The repository includes a GitHub Pages deployment workflow targeting the repository root.
-- A GitHub-hosted release audit fetched eleven live routes and six PDFs, matched them byte-for-byte to the audited `main` checkout, and confirmed the Signal Twin geometry across five responsive viewports.
+- Eleven revised live routes and assets were matched byte-for-byte to the approved campaign source.
+- All six revised PDF downloads were matched byte-for-byte.
+- The live hero contains `View role alignment`.
+- The live supporting documents contain `Role Alignment Brief` and `Candidate Thesis Brief`.
+- Superseded assessment framing is absent from the revised live experience.
 
 ## Publication provenance
 
-- Job posting: supplied in chat on July 20, 2026; no canonical public posting URL was verified.
-- Candidate vision target: https://russelldudek.github.io/ByteCubit/
-- Publication source: `main` branch and repository root.
+- Job posting: supplied directly on July 20, 2026; no canonical public posting URL was verified.
+- Candidate vision: https://russelldudek.github.io/ByteCubit/
 
-Live site, route assets, reciprocal document controls, interaction source, reduced-motion source, and all six PDF downloads passed independent publication verification.
+Brand fidelity, candidate-first positioning, responsive behavior, document pagination, evidence integrity, confidentiality, PDF delivery, and revised live publication verification passed.
