@@ -1,16 +1,20 @@
 {
   "status": "passed",
-  "verified_source_head": "0829d4374c70324b2cec40ae3d007dd4243f1f6c",
-  "verified_at_utc": "2026-07-21T00:25:41.383870+00:00",
+  "verified_source_head": "4fbba275eebda709c0a314c0874396b4672a6ba1",
+  "verified_at_utc": "2026-07-21T04:50:18.847486+00:00",
   "live_url": "https://russelldudek.github.io/ByteCubit/",
-  "routes_and_assets_verified": 11,
+  "routes_and_assets_verified": 13,
   "pdfs_verified": 6,
-  "artifact_direction": "candidate-first role alignment",
-  "required_live_copy": [
-    "View role alignment",
-    "Role Alignment Brief",
-    "Candidate Thesis Brief"
-  ],
-  "retired_live_framing_absent": true,
-  "method": "GitHub-hosted HTTP byte comparison against revised main plus live copy assertions"
+  "pdf_pages": {
+    "resume": 2,
+    "cover_letter": 1,
+    "candidate_thesis_brief": 2,
+    "entry_plan": 2,
+    "role_alignment_brief": 1,
+    "signal_twin_review": 2
+  },
+  "document_page_use": "passed",
+  "terminology_scan": "passed",
+  "hero_viewports_verified": 5,
+  "method": "GitHub-hosted exact-byte comparison, PDF pagination and text checks, plus browser geometry across five viewports"
 }
