@@ -1,10 +1,16 @@
 {
   "status": "passed",
-  "verified_source_head": "bc995b432159913cf1987c7811ade90925817f7c",
-  "verified_at_utc": "2026-07-20T23:55:54.946537+00:00",
+  "verified_source_head": "45d72863e4333de0091142dba0e48524f531386b",
+  "verified_at_utc": "2026-07-21T00:24:06.713848+00:00",
   "live_url": "https://russelldudek.github.io/ByteCubit/",
-  "routes_verified": 11,
+  "routes_and_assets_verified": 11,
   "pdfs_verified": 6,
-  "hero_viewports_verified": 5,
-  "method": "GitHub-hosted HTTP byte comparison plus browser geometry checks across five viewports"
+  "artifact_direction": "candidate-first role alignment",
+  "required_live_copy": [
+    "View role alignment",
+    "Role Alignment Brief",
+    "Candidate Thesis Brief"
+  ],
+  "retired_live_framing_absent": true,
+  "method": "GitHub-hosted HTTP byte comparison against revised main plus live copy assertions"
 }
