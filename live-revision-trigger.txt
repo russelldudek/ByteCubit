@@ -1,1 +1,1 @@
-Verify candidate-first role alignment deployment requested 2026-07-20.
+Verify final candidate-first role alignment deployment requested 2026-07-20.
