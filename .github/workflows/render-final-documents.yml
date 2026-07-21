@@ -1,0 +1,81 @@
+name: Render final candidate documents
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - qa/render-final-documents-trigger.txt
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install rendering tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils python3-pil
+
+      - name: Render final PDF thumbnails
+        shell: python
+        run: |
+          from pathlib import Path
+          from PIL import Image
+          import subprocess, tempfile
+
+          docs = [
+              ('Resume', 'docs/Russell-Dudek-Bytecubit-Resume.pdf'),
+              ('Cover Letter', 'docs/Russell-Dudek-Bytecubit-Cover-Letter.pdf'),
+              ('Candidate Thesis Brief', 'docs/Russell-Dudek-Bytecubit-Candidate-Thesis-Brief.pdf'),
+              ('90-Day Entry Plan', 'docs/Russell-Dudek-Bytecubit-90-Day-Plan.pdf'),
+              ('Role Alignment Brief', 'docs/Russell-Dudek-Bytecubit-Role-Alignment-Brief.pdf'),
+              ('Signal Twin Review', 'docs/Russell-Dudek-Bytecubit-Signal-Twin-Review.pdf'),
+          ]
+          chars = '@%#*+=-:. '
+          output = ['FINAL RENDERED PDF THUMBNAILS', 'Rendered from the committed PDFs at 72 DPI and reduced to 48 x 62 grayscale maps.', '']
+          metrics = []
+          with tempfile.TemporaryDirectory() as tmp:
+              tmp = Path(tmp)
+              for doc_index, (title, pdf) in enumerate(docs):
+                  prefix = tmp / f'doc-{doc_index}'
+                  subprocess.run(['pdftoppm', '-png', '-r', '72', pdf, str(prefix)], check=True, stdout=subprocess.DEVNULL)
+                  for page_index, page_path in enumerate(sorted(tmp.glob(f'doc-{doc_index}-*.png')), 1):
+                      image = Image.open(page_path).convert('L')
+                      width, height = image.size
+                      small = image.resize((48, 62), Image.Resampling.LANCZOS)
+                      rows = []
+                      for y in range(small.height):
+                          row = ''.join(chars[min(len(chars)-1, int(small.getpixel((x,y))/256*len(chars)))] for x in range(small.width))
+                          rows.append(row.rstrip())
+                      pixels = image.load()
+                      row_ink = [sum(1 for x in range(width) if pixels[x,y] < 245) / width for y in range(height)]
+                      content_rows = [i for i, value in enumerate(row_ink) if value > 0.002]
+                      last_content = max(content_rows) if content_rows else 0
+                      blank = (height - 1 - last_content) / 72
+                      ink = sum(1 for value in image.getdata() if value < 245) / (width * height)
+                      metrics.append((title, page_index, blank, ink))
+                      output.extend([f'=== {title} | page {page_index} ===', f'bottom blank: {blank:.2f} in | ink coverage: {ink:.3%}', *rows, ''])
+          output.append('SUMMARY')
+          output.extend(f'{title} p{page}: bottom blank {blank:.2f} in; ink coverage {ink:.3%}' for title,page,blank,ink in metrics)
+          Path('qa').mkdir(exist_ok=True)
+          Path('qa/document-renders.txt').write_text('\n'.join(output) + '\n')
+
+      - name: Remove one-time workflow and trigger
+        run: |
+          rm -f .github/workflows/render-final-documents.yml
+          rm -f qa/render-final-documents-trigger.txt
+
+      - name: Commit final rendered inspection
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Record final rendered document inspection"
+          git pull --rebase origin main
+          git push
