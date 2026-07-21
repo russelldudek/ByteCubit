@@ -1,20 +1,33 @@
 name: Verify live Bytecubit campaign
+
 on:
   push:
     branches: [main]
     paths:
-      - 'campaign-audit.md'
       - 'index.html'
+      - 'resume.html'
+      - 'cover-letter.html'
+      - 'interview-brief.html'
+      - '90-day-plan.html'
+      - 'role-alignment.html'
+      - 'signal-twin-review.html'
       - 'styles.css'
+      - 'document-layout.css'
       - 'brand-tokens.css'
       - 'app.js'
+      - 'docs/*.pdf'
+      - 'document-verification.json'
+      - 'campaign-audit.md'
       - 'qa/check-hero-geometry.py'
       - '.github/workflows/verify-live.yml'
+
 permissions:
   contents: write
+
 concurrency:
   group: verify-live-bytecubit
   cancel-in-progress: false
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -22,6 +35,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Install PDF and browser verification tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+          python -m pip install --disable-pip-version-check playwright==1.55.0
+          python -m playwright install --with-deps chromium
+
       - name: Wait for and verify GitHub Pages
         env:
           BASE_URL: https://russelldudek.github.io/ByteCubit
@@ -33,26 +54,29 @@ jobs:
             cover-letter.html
             interview-brief.html
             90-day-plan.html
-            technical-fit-proof.html
+            role-alignment.html
             signal-twin-review.html
             styles.css
+            document-layout.css
             brand-tokens.css
             app.js
+            document-verification.json
             campaign-audit.md
           )
           pdfs=(
             Russell-Dudek-Bytecubit-Resume.pdf
             Russell-Dudek-Bytecubit-Cover-Letter.pdf
-            Russell-Dudek-Bytecubit-Interview-Thesis-Brief.pdf
+            Russell-Dudek-Bytecubit-Candidate-Thesis-Brief.pdf
             Russell-Dudek-Bytecubit-90-Day-Plan.pdf
-            Russell-Dudek-Bytecubit-Technical-Fit-Proof-Plan.pdf
+            Russell-Dudek-Bytecubit-Role-Alignment-Brief.pdf
             Russell-Dudek-Bytecubit-Signal-Twin-Review.pdf
           )
           mkdir -p /tmp/bytecubit-live/docs
           verified=0
-          for attempt in $(seq 1 45); do
+          for attempt in $(seq 1 60); do
             ok=1
             for route in "${routes[@]}"; do
+              mkdir -p "/tmp/bytecubit-live/$(dirname "$route")"
               if ! curl --fail --silent --show-error --location --max-time 20 "$BASE_URL/$route" -o "/tmp/bytecubit-live/$route"; then
                 ok=0
                 break
@@ -81,22 +105,51 @@ jobs:
             sleep 10
           done
           test "$verified" -eq 1
+
           grep -q 'Signal Twin Workbench' /tmp/bytecubit-live/index.html
+          grep -q 'View role alignment' /tmp/bytecubit-live/index.html
           grep -q 'View Cover Letter' /tmp/bytecubit-live/resume.html
           grep -q 'View Resume' /tmp/bytecubit-live/cover-letter.html
+          grep -q 'Role Alignment Brief' /tmp/bytecubit-live/role-alignment.html
+          grep -q 'Candidate Thesis Brief' /tmp/bytecubit-live/interview-brief.html
           grep -q 'prefers-reduced-motion:reduce' /tmp/bytecubit-live/styles.css
           grep -q 'applyScenario' /tmp/bytecubit-live/app.js
-          for pdf in "${pdfs[@]}"; do
-            test -s "/tmp/bytecubit-live/docs/$pdf"
-          done
-      - name: Install browser geometry dependencies
-        run: |
-          python -m pip install --disable-pip-version-check playwright==1.55.0
-          python -m playwright install --with-deps chromium
+          grep -q '"status": "passed"' /tmp/bytecubit-live/document-verification.json
+
+          test "$(pdfinfo /tmp/bytecubit-live/docs/Russell-Dudek-Bytecubit-Resume.pdf | awk '/^Pages:/ {print $2}')" = 2
+          test "$(pdfinfo /tmp/bytecubit-live/docs/Russell-Dudek-Bytecubit-Cover-Letter.pdf | awk '/^Pages:/ {print $2}')" = 1
+          test "$(pdfinfo /tmp/bytecubit-live/docs/Russell-Dudek-Bytecubit-Candidate-Thesis-Brief.pdf | awk '/^Pages:/ {print $2}')" = 2
+          test "$(pdfinfo /tmp/bytecubit-live/docs/Russell-Dudek-Bytecubit-90-Day-Plan.pdf | awk '/^Pages:/ {print $2}')" = 2
+          test "$(pdfinfo /tmp/bytecubit-live/docs/Russell-Dudek-Bytecubit-Role-Alignment-Brief.pdf | awk '/^Pages:/ {print $2}')" = 1
+          test "$(pdfinfo /tmp/bytecubit-live/docs/Russell-Dudek-Bytecubit-Signal-Twin-Review.pdf | awk '/^Pages:/ {print $2}')" = 2
+
+          python - <<'PY'
+          from pathlib import Path
+          import re, subprocess
+
+          token = 'ma' + 'ndate'
+          pattern = re.compile(rf'\b{token}\b', re.I)
+          failures = []
+          for path in Path('/tmp/bytecubit-live').rglob('*'):
+              if not path.is_file():
+                  continue
+              if path.suffix.lower() == '.pdf':
+                  text = subprocess.check_output(['pdftotext', str(path), '-'], text=True)
+              elif path.suffix.lower() in {'.html', '.css', '.js', '.json', '.md'}:
+                  text = path.read_text(errors='replace')
+              else:
+                  continue
+              if pattern.search(text):
+                  failures.append(str(path))
+          if failures:
+              raise SystemExit('Rejected terminology found in live files: ' + ', '.join(failures))
+          PY
+
       - name: Verify live hero geometry
         env:
           BASE_URL: https://russelldudek.github.io/ByteCubit
         run: python qa/check-hero-geometry.py "$BASE_URL"
+
       - name: Record verification
         shell: python
         run: |
@@ -104,42 +157,37 @@ jobs:
           from pathlib import Path
           import json, os
 
-          head = os.environ['GITHUB_SHA']
           receipt = {
               'status': 'passed',
-              'verified_source_head': head,
+              'verified_source_head': os.environ['GITHUB_SHA'],
               'verified_at_utc': datetime.now(timezone.utc).isoformat(),
               'live_url': 'https://russelldudek.github.io/ByteCubit/',
-              'routes_verified': 11,
+              'routes_and_assets_verified': 13,
               'pdfs_verified': 6,
+              'pdf_pages': {
+                  'resume': 2,
+                  'cover_letter': 1,
+                  'candidate_thesis_brief': 2,
+                  'entry_plan': 2,
+                  'role_alignment_brief': 1,
+                  'signal_twin_review': 2,
+              },
+              'document_page_use': 'passed',
+              'terminology_scan': 'passed',
               'hero_viewports_verified': 5,
-              'method': 'GitHub-hosted HTTP byte comparison plus browser geometry checks across five viewports',
+              'method': 'GitHub-hosted exact-byte comparison, PDF pagination and text checks, plus browser geometry across five viewports',
           }
           Path('live-verification.json').write_text(json.dumps(receipt, indent=2) + '\n')
 
-          audit = Path('campaign-audit.md')
-          text = audit.read_text()
-          passed_line = '- Hero workbench clipping: passed at 1440×900, 1280×800, 768×1024, 390×844, and 320×800 with all readouts and scenario buttons contained.'
-          if passed_line not in text:
-              anchor = '- Horizontal overflow: 0 at all audited viewports.'
-              if anchor not in text:
-                  raise SystemExit('Campaign audit is missing the geometry anchor')
-              text = text.replace(anchor, anchor + '\n' + passed_line, 1)
-          text = text.replace(
-              '- A GitHub-hosted release audit fetched eleven live routes and six PDFs and matched them byte-for-byte to the audited `main` checkout.',
-              '- A GitHub-hosted release audit fetched eleven live routes and six PDFs, matched them byte-for-byte to the audited `main` checkout, and confirmed the Signal Twin geometry across five responsive viewports.'
-          )
-          audit.write_text(text)
       - name: Commit verification record
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add campaign-audit.md live-verification.json
+          git add live-verification.json
           if git diff --cached --quiet; then
             echo "Verification record already current."
           else
-            git commit -m "Verify Signal Twin hero geometry"
+            git commit -m "Verify dense candidate documents live"
+            git pull --rebase origin main
             git push
           fi
-
-# Final user-correction verification trigger.
