@@ -1,0 +1,115 @@
+name: Verify revised live campaign
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - live-revision-trigger.txt
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify-live:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out campaign
+        uses: actions/checkout@v4
+
+      - name: Wait for revised Pages deployment and compare files
+        env:
+          LIVE_BASE: https://russelldudek.github.io/ByteCubit
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/bytecubit-live
+          files=(
+            index.html
+            resume.html
+            cover-letter.html
+            interview-brief.html
+            90-day-plan.html
+            role-alignment.html
+            signal-twin-review.html
+            technical-fit-proof.html
+            styles.css
+            brand-tokens.css
+            app.js
+            docs/Russell-Dudek-Bytecubit-Resume.pdf
+            docs/Russell-Dudek-Bytecubit-Cover-Letter.pdf
+            docs/Russell-Dudek-Bytecubit-Candidate-Thesis-Brief.pdf
+            docs/Russell-Dudek-Bytecubit-90-Day-Plan.pdf
+            docs/Russell-Dudek-Bytecubit-Role-Alignment-Brief.pdf
+            docs/Russell-Dudek-Bytecubit-Signal-Twin-Review.pdf
+          )
+
+          for attempt in $(seq 1 48); do
+            all_match=true
+            for file in "${files[@]}"; do
+              target="/tmp/bytecubit-live/${file//\//__}"
+              if ! curl --fail --silent --show-error --location --max-time 30 "$LIVE_BASE/$file?revision=${GITHUB_SHA}" --output "$target"; then
+                all_match=false
+                break
+              fi
+              if ! cmp --silent "$file" "$target"; then
+                all_match=false
+                break
+              fi
+            done
+            if [ "$all_match" = true ]; then
+              echo "Live deployment matches the revised source."
+              break
+            fi
+            if [ "$attempt" -eq 48 ]; then
+              echo "Revised live deployment did not converge within the verification window." >&2
+              exit 1
+            fi
+            sleep 10
+          done
+
+          grep -Fq 'View role alignment' /tmp/bytecubit-live/index.html
+          grep -Fq 'Role Alignment Brief' /tmp/bytecubit-live/role-alignment.html
+          grep -Fq 'Candidate Thesis Brief' /tmp/bytecubit-live/interview-brief.html
+          ! grep -Fqi "See how I'd prove the fit" /tmp/bytecubit-live/index.html
+          ! grep -Fqi 'Technical Fit & Proof Plan' /tmp/bytecubit-live/role-alignment.html
+
+      - name: Record exact live verification
+        run: |
+          python - <<'PY'
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+          import subprocess
+
+          source_head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          report = {
+              'status': 'passed',
+              'verified_source_head': source_head,
+              'verified_at_utc': datetime.now(timezone.utc).isoformat(),
+              'live_url': 'https://russelldudek.github.io/ByteCubit/',
+              'routes_and_assets_verified': 11,
+              'pdfs_verified': 6,
+              'artifact_direction': 'candidate-first role alignment',
+              'required_live_copy': [
+                  'View role alignment',
+                  'Role Alignment Brief',
+                  'Candidate Thesis Brief'
+              ],
+              'retired_live_framing_absent': True,
+              'method': 'GitHub-hosted HTTP byte comparison against revised main plus live copy assertions'
+          }
+          Path('live-verification.json').write_text(json.dumps(report, indent=2) + '\n')
+          PY
+
+      - name: Commit live verification receipt
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add live-verification.json
+          if git diff --cached --quiet; then
+            echo "Live verification receipt unchanged."
+          else
+            git commit -m "Verify revised candidate alignment live"
+            git push
+          fi
