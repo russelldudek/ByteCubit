@@ -10,9 +10,9 @@ await mkdir(output, { recursive: true });
 const documents = [
   ['resume.html', 'Russell-Dudek-Bytecubit-Resume.pdf'],
   ['cover-letter.html', 'Russell-Dudek-Bytecubit-Cover-Letter.pdf'],
-  ['interview-brief.html', 'Russell-Dudek-Bytecubit-Interview-Thesis-Brief.pdf'],
+  ['interview-brief.html', 'Russell-Dudek-Bytecubit-Candidate-Thesis-Brief.pdf'],
   ['90-day-plan.html', 'Russell-Dudek-Bytecubit-90-Day-Plan.pdf'],
-  ['technical-fit-proof.html', 'Russell-Dudek-Bytecubit-Technical-Fit-Proof-Plan.pdf'],
+  ['role-alignment.html', 'Russell-Dudek-Bytecubit-Role-Alignment-Brief.pdf'],
   ['signal-twin-review.html', 'Russell-Dudek-Bytecubit-Signal-Twin-Review.pdf']
 ];
 
