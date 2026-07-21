@@ -1,0 +1,50 @@
+{
+  "status": "passed",
+  "verified_at_utc": "2026-07-21T00:19:56.319Z",
+  "artifact_direction": "candidate-first role alignment",
+  "documents": [
+    {
+      "html": "resume.html",
+      "pdf": "docs/Russell-Dudek-Bytecubit-Resume.pdf",
+      "expected_pages": 2,
+      "actual_pages": 2
+    },
+    {
+      "html": "cover-letter.html",
+      "pdf": "docs/Russell-Dudek-Bytecubit-Cover-Letter.pdf",
+      "expected_pages": 1,
+      "actual_pages": 1
+    },
+    {
+      "html": "interview-brief.html",
+      "pdf": "docs/Russell-Dudek-Bytecubit-Candidate-Thesis-Brief.pdf",
+      "expected_pages": 4,
+      "actual_pages": 4
+    },
+    {
+      "html": "90-day-plan.html",
+      "pdf": "docs/Russell-Dudek-Bytecubit-90-Day-Plan.pdf",
+      "expected_pages": 3,
+      "actual_pages": 3
+    },
+    {
+      "html": "role-alignment.html",
+      "pdf": "docs/Russell-Dudek-Bytecubit-Role-Alignment-Brief.pdf",
+      "expected_pages": 2,
+      "actual_pages": 2
+    },
+    {
+      "html": "signal-twin-review.html",
+      "pdf": "docs/Russell-Dudek-Bytecubit-Signal-Twin-Review.pdf",
+      "expected_pages": 2,
+      "actual_pages": 2
+    }
+  ],
+  "retired_artifacts_absent": [
+    "docs/Russell-Dudek-Bytecubit-Technical-Fit-Proof-Plan.pdf",
+    "docs/Russell-Dudek-Bytecubit-Interview-Thesis-Brief.pdf"
+  ],
+  "current_pdf_count": 6,
+  "rejected_phrase_matches": [],
+  "failures": []
+}
