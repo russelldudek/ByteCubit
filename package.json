@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate-pdfs": "node scripts/generate-pdfs.mjs"
+    "generate-pdfs": "node scripts/generate-pdfs.mjs",
+    "verify-documents": "node scripts/verify-documents.mjs"
   },
   "devDependencies": {
     "playwright": "1.54.1"
