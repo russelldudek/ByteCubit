@@ -32,6 +32,7 @@ jobs:
       - name: Regenerate PDF documents
         run: |
           rm -f docs/Russell-Dudek-Bytecubit-Technical-Fit-Proof-Plan.pdf
+          rm -f docs/Russell-Dudek-Bytecubit-Interview-Thesis-Brief.pdf
           npm run generate-pdfs
 
       - name: Commit refreshed PDFs
