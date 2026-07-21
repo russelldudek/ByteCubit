@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "verified_at_utc": "2026-07-21T00:19:56.319Z",
+  "verified_at_utc": "2026-07-21T00:22:08.237Z",
   "artifact_direction": "candidate-first role alignment",
   "documents": [
     {
@@ -38,6 +38,134 @@
       "pdf": "docs/Russell-Dudek-Bytecubit-Signal-Twin-Review.pdf",
       "expected_pages": 2,
       "actual_pages": 2
+    }
+  ],
+  "responsive_checks": [
+    {
+      "route": "index.html",
+      "viewport": "laptop",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "resume.html",
+      "viewport": "laptop",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "cover-letter.html",
+      "viewport": "laptop",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "interview-brief.html",
+      "viewport": "laptop",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "90-day-plan.html",
+      "viewport": "laptop",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "role-alignment.html",
+      "viewport": "laptop",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "signal-twin-review.html",
+      "viewport": "laptop",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "index.html",
+      "viewport": "tablet",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "resume.html",
+      "viewport": "tablet",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "cover-letter.html",
+      "viewport": "tablet",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "interview-brief.html",
+      "viewport": "tablet",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "90-day-plan.html",
+      "viewport": "tablet",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "role-alignment.html",
+      "viewport": "tablet",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "signal-twin-review.html",
+      "viewport": "tablet",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "index.html",
+      "viewport": "mobile",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "resume.html",
+      "viewport": "mobile",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "cover-letter.html",
+      "viewport": "mobile",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "interview-brief.html",
+      "viewport": "mobile",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "90-day-plan.html",
+      "viewport": "mobile",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "role-alignment.html",
+      "viewport": "mobile",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
+    },
+    {
+      "route": "signal-twin-review.html",
+      "viewport": "mobile",
+      "horizontal_overflow": 0,
+      "sheet_overflow": 0
     }
   ],
   "retired_artifacts_absent": [
