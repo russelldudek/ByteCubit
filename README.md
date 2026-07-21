@@ -9,9 +9,9 @@ https://russelldudek.github.io/ByteCubit/
 - Candidate vision site
 - Two-page role-aligned resume
 - One-page cover letter
-- Interview thesis brief
+- Candidate thesis brief
 - 90-day entry plan
-- Technical Fit & Proof Plan
+- Role Alignment Brief
 - Signal Twin Review
 - Generated PDF downloads
 - Brand intelligence, role intelligence, and source notes
