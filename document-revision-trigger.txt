@@ -1,1 +1,1 @@
-Regenerate the revised candidate documents and verify deliberate page use.
+Regenerate the revised candidate documents and preserve page-use diagnostics.
