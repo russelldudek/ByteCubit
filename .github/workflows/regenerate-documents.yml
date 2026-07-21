@@ -26,23 +26,28 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+      - name: Install Chromium and PDF inspection tools
+        run: |
+          npx playwright install --with-deps chromium
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
 
       - name: Regenerate PDF documents
         run: |
-          rm -f docs/Russell-Dudek-Bytecubit-Technical-Fit-Proof-Plan.pdf
-          rm -f docs/Russell-Dudek-Bytecubit-Interview-Thesis-Brief.pdf
+          find docs -maxdepth 1 -type f \( -name '*Technical-Fit*' -o -name '*Interview-Thesis*' \) -delete
           npm run generate-pdfs
 
-      - name: Commit refreshed PDFs
+      - name: Verify candidate-first documents
+        run: node scripts/verify-documents.mjs
+
+      - name: Commit refreshed and verified documents
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A docs
+          git add -A docs document-verification.json
           if git diff --cached --quiet; then
-            echo "No PDF changes to commit."
+            echo "No document changes to commit."
           else
-            git commit -m "Refresh candidate document PDFs"
+            git commit -m "Refresh and verify candidate documents"
             git push
           fi
