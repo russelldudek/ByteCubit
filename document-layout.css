@@ -1,0 +1,94 @@
+/* Candidate document layout overrides: deliberate page use without microscopic type. */
+.doc-body main{overflow:visible}
+.sheet.document-page{padding:.38in .46in .34in;display:flex;flex-direction:column}
+.document-page .doc-header{margin-bottom:.12in;padding-bottom:.12in}
+.document-page .doc-header h1{font-size:25pt}
+.document-page .identity-line{font-size:9.2pt}
+.document-page .contact-line{font-size:7.8pt;line-height:1.36}
+.document-page .doc-section{margin:.105in 0}
+.document-page .doc-section h2{font-size:10.2pt;margin-bottom:.055in;padding-bottom:.03in}
+.document-page .doc-section p,
+.document-page .doc-section li{font-size:8.9pt;line-height:1.32}
+.document-page .doc-section p{margin:.038in 0}
+.document-page .doc-section ul,
+.document-page .doc-section ol{margin:.035in 0 .045in;padding-left:.18in}
+.document-page .artifact-title{font-size:24pt;margin-top:.01in}
+.document-page .artifact-subtitle{font-size:9.5pt;line-height:1.35;margin:.04in 0 .08in;max-width:7in}
+.document-page .artifact-card{padding:.105in .12in}
+.document-page .artifact-card h3{font-size:9.8pt;line-height:1.12}
+.document-page .artifact-card p,
+.document-page .artifact-card li{font-size:8.35pt;line-height:1.3}
+.document-page .artifact-grid{gap:.085in}
+.document-page .mini-table th,
+.document-page .mini-table td{font-size:8.05pt;line-height:1.24;padding:.045in .05in}
+.document-page .doc-callout{padding:.09in .12in;margin:.08in 0;font-size:8.8pt;line-height:1.32}
+.document-page .page-content{display:flex;flex:1;flex-direction:column;min-height:0}
+.document-page .page-fill{display:flex;flex:1;flex-direction:column;justify-content:space-between;gap:.08in}
+.document-page .page-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.12in}
+.document-page .page-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:.1in}
+.document-page .page-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:.075in}
+.document-page .span-2{grid-column:1 / -1}
+.document-page .compact-header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--brand-red);padding-bottom:.075in;margin-bottom:.12in;font-size:7.8pt;color:var(--muted)}
+.document-page .compact-header strong{font-size:9pt;color:var(--brand-navy)}
+.document-page .compact-header span{text-align:right}
+.document-page .data-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:.07in;margin:.07in 0 .1in}
+.document-page .data-point{border-top:3px solid var(--brand-red);background:var(--brand-pale);padding:.075in .09in;min-height:.55in}
+.document-page .data-point strong{display:block;font-size:11pt;color:var(--brand-navy);line-height:1.05}
+.document-page .data-point span{display:block;font-size:7.5pt;line-height:1.2;margin-top:.035in;color:var(--muted)}
+.document-page .alignment-list{display:grid;grid-template-columns:repeat(2,1fr);gap:.08in}
+.document-page .alignment-item{border-left:3px solid var(--brand-red);padding:.065in .09in;background:#f8f9fd}
+.document-page .alignment-item strong{display:block;font-size:9pt;color:var(--brand-navy)}
+.document-page .alignment-item span{display:block;font-size:8pt;line-height:1.28;margin-top:.025in}
+.document-page .phase-block{border:1px solid var(--brand-line);padding:.1in .12in;background:#fff}
+.document-page .phase-block h3{font-size:11pt;color:var(--brand-navy);margin-bottom:.045in}
+.document-page .phase-block .days{display:block;font-size:7.3pt;letter-spacing:.11em;text-transform:uppercase;color:var(--brand-red);font-weight:900;margin-bottom:.035in}
+.document-page .question-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.06in .14in}
+.document-page .question-item{font-size:8.35pt;line-height:1.28;padding:.055in 0;border-top:1px solid var(--brand-line)}
+.document-page .success-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:.07in}
+.document-page .success-item{border:1px solid var(--brand-line);padding:.075in .09in;background:#fff}
+.document-page .success-item strong{display:block;font-size:8.6pt;color:var(--brand-navy)}
+.document-page .success-item span{display:block;font-size:7.7pt;line-height:1.25;margin-top:.025in;color:var(--muted)}
+.document-page .signoff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.08in;margin-top:.08in}
+.document-page .signoff-box{border:1px solid var(--brand-line);padding:.08in;min-height:.62in;font-size:7.7pt;color:var(--muted)}
+.document-page .signoff-box strong{display:block;color:var(--brand-navy);font-size:8.3pt;margin-bottom:.2in}
+.document-page .push-bottom{margin-top:auto}
+.resume-document .experience{margin-bottom:.08in}
+.resume-document .experience-head h3{font-size:9.8pt}
+.resume-document .role-title{font-size:8.15pt}
+.resume-document .capability-grid{gap:.035in .13in}
+.resume-document .capability-grid div{font-size:7.9pt;padding:.035in 0}
+.resume-document .compact-list{font-size:8.4pt}
+.resume-document .two-col{gap:.18in}
+.cover-document .letter-meta{display:grid;grid-template-columns:1fr 1.2fr;gap:.2in;font-size:8.6pt;margin:.02in 0 .12in;padding-bottom:.08in;border-bottom:1px solid var(--brand-line)}
+.cover-document .letter-meta .subject{text-align:right}
+.cover-document .letter-body{display:flex;flex:1;flex-direction:column}
+.cover-document .letter-body p{font-size:10.35pt;line-height:1.47;margin:.085in 0}
+.cover-document .vision-note{border-left:4px solid var(--brand-red);background:var(--brand-pale);padding:.08in .12in;margin:.08in 0;font-size:9.2pt;line-height:1.35}
+.cover-document .letter-close{margin-top:auto}
+.cover-document .signature{margin-top:.12in}
+
+@media print{
+  .sheet.document-page{padding:.38in .46in .34in}
+}
+
+@media screen and (max-width:900px){
+  .sheet.document-page{padding:.4in}
+  .document-page .page-grid-4,
+  .document-page .data-strip{grid-template-columns:repeat(2,1fr)}
+  .document-page .page-grid-3,
+  .document-page .success-strip{grid-template-columns:1fr}
+}
+
+@media screen and (max-width:560px){
+  .sheet.document-page{padding:.28in}
+  .document-page .page-grid-2,
+  .document-page .page-grid-4,
+  .document-page .data-strip,
+  .document-page .alignment-list,
+  .document-page .question-grid,
+  .document-page .signoff-grid{grid-template-columns:1fr}
+  .document-page .compact-header{align-items:flex-start;flex-direction:column;gap:.05in}
+  .document-page .compact-header span{text-align:left}
+  .cover-document .letter-meta{grid-template-columns:1fr}
+  .cover-document .letter-meta .subject{text-align:left}
+}
