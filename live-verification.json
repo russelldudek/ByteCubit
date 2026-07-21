@@ -1,10 +1,11 @@
 {
   "status": "passed",
-  "verified_source_head": "1eac38fbb0f23a2acf4c477ee82b9af06c6a3793",
-  "verified_at_utc": "2026-07-21T04:51:51.444584+00:00",
+  "verified_source_head": "5cfd42d5b599b8077ac7fcbc53db9b5e415c5e33",
+  "verified_at_utc": "2026-07-21T05:14:20.999028+00:00",
   "live_url": "https://russelldudek.github.io/ByteCubit/",
   "routes_and_assets_verified": 13,
   "pdfs_verified": 6,
+  "total_printed_pages": 10,
   "pdf_pages": {
     "resume": 2,
     "cover_letter": 1,
@@ -14,7 +15,7 @@
     "signal_twin_review": 2
   },
   "document_page_use": "passed",
+  "rendered_page_review": "passed",
   "terminology_scan": "passed",
-  "hero_viewports_verified": 5,
-  "method": "GitHub-hosted exact-byte comparison, PDF pagination and text checks, plus browser geometry across five viewports"
+  "method": "Exact public-file comparison against current main, six live PDF comparisons, pagination checks, and HTML/PDF text scan"
 }
