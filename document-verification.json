@@ -1,6 +1,6 @@
 {
-  "status": "failed",
-  "verified_at_utc": "2026-07-21T04:40:28.180Z",
+  "status": "passed",
+  "verified_at_utc": "2026-07-21T04:45:10.900Z",
   "artifact_direction": "candidate-first role alignment with deliberate page use",
   "documents": [
     {
@@ -45,9 +45,9 @@
       "route": "resume.html",
       "page": 1,
       "pageHeightPx": 1056,
-      "unusedBottomPx": 114.875,
-      "unusedBottomIn": 1.1966145833333333,
-      "usedHeightRatio": 0.8912168560606061,
+      "unusedBottomPx": 13.15625,
+      "unusedBottomIn": 0.13704427083333334,
+      "usedHeightRatio": 0.9875414299242424,
       "minimumBodyFontPx": 11.8667
     },
     {
@@ -267,7 +267,5 @@
   "current_pdf_count": 6,
   "rejected_phrase_matches": [],
   "terminology_matches": [],
-  "failures": [
-    "resume.html page 1: 1.20in unused at bottom; limit is 0.78in"
-  ]
+  "failures": []
 }
