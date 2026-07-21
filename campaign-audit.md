@@ -1,6 +1,6 @@
 # Campaign Completion Audit
 
-Campaign state: complete — the candidate-first campaign has been rebuilt, rendered, and prepared for exact live verification.
+Campaign state: complete — the candidate-first campaign has been rebuilt, rendered, and is ready for its final exact publication receipt.
 
 ## Positioning and terminology correction
 
@@ -77,4 +77,4 @@ The generated PDFs were inspected through print-DOM geometry and rasterized full
 - Job posting: supplied directly on July 20, 2026; no canonical public posting URL was verified.
 - Candidate vision: https://russelldudek.github.io/ByteCubit/
 
-Brand fidelity, candidate-first positioning, terminology integrity, responsive behavior, deliberate document composition, evidence integrity, confidentiality, PDF delivery, and live publication verification are required for the final completion receipt.
+This audit revision intentionally triggers a publication-only verification after the final regenerated PDF set, ensuring the completion receipt is tied to the current documents rather than an earlier render.
