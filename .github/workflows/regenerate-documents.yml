@@ -5,11 +5,27 @@ on:
     branches:
       - main
     paths:
-      - document-revision-trigger.txt
+      - 'resume.html'
+      - 'cover-letter.html'
+      - 'interview-brief.html'
+      - '90-day-plan.html'
+      - 'role-alignment.html'
+      - 'signal-twin-review.html'
+      - 'styles.css'
+      - 'document-layout.css'
+      - 'scripts/generate-pdfs.mjs'
+      - 'scripts/verify-documents.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/regenerate-documents.yml'
   workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: regenerate-bytecubit-documents
+  cancel-in-progress: false
 
 jobs:
   generate-pdfs:
@@ -17,6 +33,8 @@ jobs:
     steps:
       - name: Check out campaign
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Remove rejected terminology from public text
         shell: python
@@ -82,6 +100,7 @@ jobs:
             echo "No document changes to commit."
           else
             git commit -m "Refresh dense candidate documents"
+            git pull --rebase origin main
             git push
           fi
 
