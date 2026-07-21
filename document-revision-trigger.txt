@@ -1,1 +1,1 @@
-Regenerate the revised candidate documents and preserve page-use diagnostics.
+Regenerate the revised documents after the resume page-balance correction.
