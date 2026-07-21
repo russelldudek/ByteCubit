@@ -2,6 +2,8 @@ import { execFileSync } from 'node:child_process';
 import { access, readFile, readdir, writeFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { chromium } from 'playwright';
 
 const root = resolve(new URL('..', import.meta.url).pathname);
 const docs = [
@@ -36,8 +38,15 @@ const requiredPhrases = [
   { file: 'interview-brief.html', phrase: 'Candidate Thesis Brief' }
 ];
 
+const viewports = [
+  { name: 'laptop', width: 1280, height: 800 },
+  { name: 'tablet', width: 768, height: 1024 },
+  { name: 'mobile', width: 390, height: 844 }
+];
+
 const failures = [];
 const results = [];
+const responsiveChecks = [];
 let searchableText = '';
 
 for (const doc of docs) {
@@ -81,11 +90,52 @@ for (const phrase of rejectedPhrases) {
 const currentPdfs = (await readdir(resolve(root, 'docs'))).filter((name) => name.toLowerCase().endsWith('.pdf')).sort();
 if (currentPdfs.length !== 6) failures.push(`expected 6 current PDFs, found ${currentPdfs.length}`);
 
+const browser = await chromium.launch({ headless: true });
+try {
+  for (const viewport of viewports) {
+    for (const route of ['index.html', ...docs.map((doc) => doc.html)]) {
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height } });
+      await page.goto(pathToFileURL(resolve(root, route)).href, { waitUntil: 'networkidle' });
+      await page.evaluate(() => document.fonts.ready);
+      const geometry = await page.evaluate(() => {
+        const root = document.documentElement;
+        const body = document.body;
+        const overflow = Math.max(root.scrollWidth, body.scrollWidth) - root.clientWidth;
+        const sheets = [...document.querySelectorAll('.sheet')].map((sheet) => {
+          const rect = sheet.getBoundingClientRect();
+          const descendants = [...sheet.querySelectorAll('*')];
+          const deepestBottom = descendants.reduce((max, element) => Math.max(max, element.getBoundingClientRect().bottom), rect.top);
+          return {
+            content_overflow_bottom: Math.max(0, deepestBottom - rect.bottom),
+            scroll_overflow: Math.max(0, sheet.scrollHeight - sheet.clientHeight)
+          };
+        });
+        return {
+          horizontal_overflow: Math.max(0, overflow),
+          sheet_overflow: sheets
+        };
+      });
+
+      const maxSheetOverflow = geometry.sheet_overflow.reduce(
+        (max, item) => Math.max(max, item.content_overflow_bottom, item.scroll_overflow),
+        0
+      );
+      responsiveChecks.push({ route, viewport: viewport.name, horizontal_overflow: geometry.horizontal_overflow, sheet_overflow: maxSheetOverflow });
+      if (geometry.horizontal_overflow > 1) failures.push(`${route} at ${viewport.name}: horizontal overflow ${geometry.horizontal_overflow}px`);
+      if (maxSheetOverflow > 2) failures.push(`${route} at ${viewport.name}: sheet content overflow ${maxSheetOverflow}px`);
+      await page.close();
+    }
+  }
+} finally {
+  await browser.close();
+}
+
 const report = {
   status: failures.length === 0 ? 'passed' : 'failed',
   verified_at_utc: new Date().toISOString(),
   artifact_direction: 'candidate-first role alignment',
   documents: results,
+  responsive_checks: responsiveChecks,
   retired_artifacts_absent: retiredPdfs,
   current_pdf_count: currentPdfs.length,
   rejected_phrase_matches: failures.filter((item) => item.startsWith('rejected candidate-facing phrase')),
