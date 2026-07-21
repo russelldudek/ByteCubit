@@ -69,9 +69,11 @@ jobs:
           npm run generate-pdfs
 
       - name: Verify content, pagination, page use, and responsive behavior
+        id: verify
+        continue-on-error: true
         run: npm run verify-documents
 
-      - name: Commit refreshed and verified documents
+      - name: Commit refreshed documents and verification report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -82,3 +84,7 @@ jobs:
             git commit -m "Refresh dense candidate documents"
             git push
           fi
+
+      - name: Enforce verification result
+        if: steps.verify.outcome != 'success'
+        run: exit 1
