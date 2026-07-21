@@ -1,0 +1,1 @@
+Render the current PDF set for full-page visual inspection.
