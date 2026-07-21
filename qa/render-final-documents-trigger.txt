@@ -1,1 +1,0 @@
-Render the final verified PDF set for full-page inspection.
