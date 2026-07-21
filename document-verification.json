@@ -1,7 +1,7 @@
 {
-  "status": "passed",
-  "verified_at_utc": "2026-07-21T00:22:08.237Z",
-  "artifact_direction": "candidate-first role alignment",
+  "status": "failed",
+  "verified_at_utc": "2026-07-21T04:40:28.180Z",
+  "artifact_direction": "candidate-first role alignment with deliberate page use",
   "documents": [
     {
       "html": "resume.html",
@@ -18,26 +18,118 @@
     {
       "html": "interview-brief.html",
       "pdf": "docs/Russell-Dudek-Bytecubit-Candidate-Thesis-Brief.pdf",
-      "expected_pages": 4,
-      "actual_pages": 4
+      "expected_pages": 2,
+      "actual_pages": 2
     },
     {
       "html": "90-day-plan.html",
       "pdf": "docs/Russell-Dudek-Bytecubit-90-Day-Plan.pdf",
-      "expected_pages": 3,
-      "actual_pages": 3
+      "expected_pages": 2,
+      "actual_pages": 2
     },
     {
       "html": "role-alignment.html",
       "pdf": "docs/Russell-Dudek-Bytecubit-Role-Alignment-Brief.pdf",
-      "expected_pages": 2,
-      "actual_pages": 2
+      "expected_pages": 1,
+      "actual_pages": 1
     },
     {
       "html": "signal-twin-review.html",
       "pdf": "docs/Russell-Dudek-Bytecubit-Signal-Twin-Review.pdf",
       "expected_pages": 2,
       "actual_pages": 2
+    }
+  ],
+  "page_use": [
+    {
+      "route": "resume.html",
+      "page": 1,
+      "pageHeightPx": 1056,
+      "unusedBottomPx": 114.875,
+      "unusedBottomIn": 1.1966145833333333,
+      "usedHeightRatio": 0.8912168560606061,
+      "minimumBodyFontPx": 11.8667
+    },
+    {
+      "route": "resume.html",
+      "page": 2,
+      "pageHeightPx": 1056,
+      "unusedBottomPx": 50.375,
+      "unusedBottomIn": 0.5247395833333334,
+      "usedHeightRatio": 0.9522964015151515,
+      "minimumBodyFontPx": 11.8667
+    },
+    {
+      "route": "cover-letter.html",
+      "page": 1,
+      "pageHeightPx": 1056,
+      "unusedBottomPx": 40.78125,
+      "unusedBottomIn": 0.4248046875,
+      "usedHeightRatio": 0.9613813920454546,
+      "minimumBodyFontPx": 13.8
+    },
+    {
+      "route": "interview-brief.html",
+      "page": 1,
+      "pageHeightPx": 1056,
+      "unusedBottomPx": 43.234375,
+      "unusedBottomIn": 0.4503580729166667,
+      "usedHeightRatio": 0.9590583570075758,
+      "minimumBodyFontPx": 10.7333
+    },
+    {
+      "route": "interview-brief.html",
+      "page": 2,
+      "pageHeightPx": 1056,
+      "unusedBottomPx": 50.375,
+      "unusedBottomIn": 0.5247395833333334,
+      "usedHeightRatio": 0.9522964015151515,
+      "minimumBodyFontPx": 10.7333
+    },
+    {
+      "route": "90-day-plan.html",
+      "page": 1,
+      "pageHeightPx": 1056,
+      "unusedBottomPx": 0,
+      "unusedBottomIn": 0,
+      "usedHeightRatio": 1,
+      "minimumBodyFontPx": 11.1333
+    },
+    {
+      "route": "90-day-plan.html",
+      "page": 2,
+      "pageHeightPx": 1056,
+      "unusedBottomPx": 26.5625,
+      "unusedBottomIn": 0.2766927083333333,
+      "usedHeightRatio": 0.9748461174242424,
+      "minimumBodyFontPx": 10.7333
+    },
+    {
+      "route": "role-alignment.html",
+      "page": 1,
+      "pageHeightPx": 1056,
+      "unusedBottomPx": 0,
+      "unusedBottomIn": 0,
+      "usedHeightRatio": 1,
+      "minimumBodyFontPx": 10.7333
+    },
+    {
+      "route": "signal-twin-review.html",
+      "page": 1,
+      "pageHeightPx": 1056,
+      "unusedBottomPx": 42.703125,
+      "unusedBottomIn": 0.44482421875,
+      "usedHeightRatio": 0.9595614346590909,
+      "minimumBodyFontPx": 10.7333
+    },
+    {
+      "route": "signal-twin-review.html",
+      "page": 2,
+      "pageHeightPx": 1056,
+      "unusedBottomPx": 50.375,
+      "unusedBottomIn": 0.5247395833333334,
+      "usedHeightRatio": 0.9522964015151515,
+      "minimumBodyFontPx": 10.7333
     }
   ],
   "responsive_checks": [
@@ -174,5 +266,8 @@
   ],
   "current_pdf_count": 6,
   "rejected_phrase_matches": [],
-  "failures": []
+  "terminology_matches": [],
+  "failures": [
+    "resume.html page 1: 1.20in unused at bottom; limit is 0.78in"
+  ]
 }

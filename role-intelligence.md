@@ -3,7 +3,7 @@
 ## Nominal role
 Contract industrial automation engineer developing and configuring Ignition, modernizing legacy MES functionality, supporting SQL/manufacturing applications, cleaning AVEVA PI, and connecting plant data to a cloud data lake.
 
-## Actual mandate
+## actual work
 Create a dependable modernization bridge from legacy manufacturing applications to a supportable Ignition/data architecture while production continues to run.
 
 ## Company moment

@@ -5,7 +5,7 @@ Campaign state: complete — the revised candidate-first campaign is published a
 ## Candidate-positioning revision
 
 - The assessment-oriented supporting artifact was retired.
-- The primary hero action now opens a Role Alignment Brief focused on the mandate, verified experience, immediate contribution, and operating stance.
+- The primary hero action now opens a Role Alignment Brief focused on the work, verified experience, immediate contribution, and operating stance.
 - The former interview-oriented document is now a Candidate Thesis Brief focused on Russell's point of view, operating model, alignment, priorities, and questions.
 - Hiring-manager test language, proceed-or-reject framing, and self-authored evaluation language were removed from the site, documents, and generated PDFs.
 - The resume and cover letter now reinforce the same affirmative alignment story while preserving factual boundaries.
