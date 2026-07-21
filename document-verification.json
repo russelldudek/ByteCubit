@@ -1,6 +1,6 @@
 {
-  "status": "passed",
-  "verified_at_utc": "2026-07-21T04:45:10.900Z",
+  "status": "failed",
+  "verified_at_utc": "2026-07-21T04:54:12.331Z",
   "artifact_direction": "candidate-first role alignment with deliberate page use",
   "documents": [
     {
@@ -63,9 +63,9 @@
       "route": "cover-letter.html",
       "page": 1,
       "pageHeightPx": 1056,
-      "unusedBottomPx": 40.78125,
-      "unusedBottomIn": 0.4248046875,
-      "usedHeightRatio": 0.9613813920454546,
+      "unusedBottomPx": 117.890625,
+      "unusedBottomIn": 1.22802734375,
+      "usedHeightRatio": 0.8883611505681818,
       "minimumBodyFontPx": 13.8
     },
     {
@@ -81,9 +81,9 @@
       "route": "interview-brief.html",
       "page": 2,
       "pageHeightPx": 1056,
-      "unusedBottomPx": 50.375,
-      "unusedBottomIn": 0.5247395833333334,
-      "usedHeightRatio": 0.9522964015151515,
+      "unusedBottomPx": 6,
+      "unusedBottomIn": 0.0625,
+      "usedHeightRatio": 0.9943181818181818,
       "minimumBodyFontPx": 10.7333
     },
     {
@@ -267,5 +267,7 @@
   "current_pdf_count": 6,
   "rejected_phrase_matches": [],
   "terminology_matches": [],
-  "failures": []
+  "failures": [
+    "cover-letter.html page 1: 1.23in unused at bottom; limit is 0.82in"
+  ]
 }
