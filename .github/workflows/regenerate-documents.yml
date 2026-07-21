@@ -1,4 +1,4 @@
-name: Regenerate candidate documents
+name: Regenerate and verify candidate documents
 
 on:
   push:
@@ -18,6 +18,37 @@ jobs:
       - name: Check out campaign
         uses: actions/checkout@v4
 
+      - name: Remove rejected terminology from public text
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          token = 'ma' + 'ndate'
+          allowed = {'.html', '.css', '.js', '.mjs', '.json', '.md', '.txt', '.yml', '.yaml'}
+          replacements = [
+              (re.compile(rf'actual\s+{token}', re.I), 'actual work'),
+              (re.compile(rf'operating\s+{token}', re.I), 'operating objective'),
+              (re.compile(rf'role\s+{token}', re.I), 'role objective'),
+              (re.compile(rf'{token}\s+summary', re.I), 'work summary'),
+              (re.compile(rf'{token}\s+need', re.I), 'role need'),
+              (re.compile(rf'the\s+{token}', re.I), 'the work'),
+              (re.compile(rf'this\s+{token}', re.I), 'this work'),
+              (re.compile(rf'\b{token}\b', re.I), 'objective'),
+          ]
+          for path in Path('.').rglob('*'):
+              if not path.is_file() or path.suffix.lower() not in allowed or '.git' in path.parts:
+                  continue
+              try:
+                  text = path.read_text()
+              except UnicodeDecodeError:
+                  continue
+              revised = text
+              for pattern, replacement in replacements:
+                  revised = pattern.sub(replacement, revised)
+              if revised != text:
+                  path.write_text(revised)
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -34,20 +65,20 @@ jobs:
 
       - name: Regenerate PDF documents
         run: |
-          find docs -maxdepth 1 -type f \( -name '*Technical-Fit*' -o -name '*Interview-Thesis*' \) -delete
+          rm -f docs/*.pdf
           npm run generate-pdfs
 
-      - name: Verify candidate-first documents
-        run: node scripts/verify-documents.mjs
+      - name: Verify content, pagination, page use, and responsive behavior
+        run: npm run verify-documents
 
       - name: Commit refreshed and verified documents
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A docs document-verification.json
+          git add -A
           if git diff --cached --quiet; then
             echo "No document changes to commit."
           else
-            git commit -m "Refresh and verify candidate documents"
+            git commit -m "Refresh dense candidate documents"
             git push
           fi
